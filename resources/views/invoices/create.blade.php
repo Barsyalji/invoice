@@ -94,8 +94,9 @@
 
 <body>
     <div class="first_div">
+    <form action="" method="post" id="form_data">
+
         <div class="invoice">
-            <form action="" method="post" id="form_data">
                 <div class="invoice_bill">
                     <div>
                         <input type="file" name="image" id="image">
@@ -264,18 +265,18 @@
                 $('#sub_total').val(totalAmount.toFixed(2));
                 //get data discount filed
                 var discount = parseFloat($("input[name=discount]").val()) || 0;
-                discount = (discount*totalAmount)/100;
-                total = totalAmount-discount;
-                  //get data discount filed
+                discount = (discount * totalAmount) / 100;
+                total = totalAmount - discount;
+                //get data discount filed
                 var tax = parseFloat($("input[name=tax]").val()) || 0;
-                tax = (tax*total)/100;
-                    //get data discount filed
-                 var shiping = parseFloat($("input[name=shiping]").val()) || 0;
-                 total = total + tax +shiping;
-                 $('#total').val(total.toFixed(2))
-                 var paid_amount = parseFloat($("input[name=paid_amount]").val()) || 0;
-                 paid_amount = total -paid_amount;
-                 $('#due_amount').val(paid_amount.toFixed(2));
+                tax = (tax * total) / 100;
+                //get data discount filed
+                var shiping = parseFloat($("input[name=shiping]").val()) || 0;
+                total = total + tax + shiping;
+                $('#total').val(total.toFixed(2))
+                var paid_amount = parseFloat($("input[name=paid_amount]").val()) || 0;
+                paid_amount = total - paid_amount;
+                $('#due_amount').val(paid_amount.toFixed(2));
             }
 
         });
