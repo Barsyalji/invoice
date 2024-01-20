@@ -12,12 +12,12 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        try{
+        try {
             // $invoice = Invoice::all();
             $invoice = 'atul';
-            return view('invoices.index',['invoices'=>$invoice]);
-        }catch(\Exception $e){
-            return "Error : ".$e->getmessage()."<br> Line No : " .$e->getline();
+            return view('invoices.index', ['invoices' => $invoice]);
+        } catch (\Exception $e) {
+            return "Error : " . $e->getmessage() . "<br> Line No : " . $e->getline();
         }
     }
 
@@ -26,13 +26,13 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        try{
+        try {
             // $invoice = Invoice::all();
             $invoice = 'atul';
-            return view('invoices.create',['invoices'=>$invoice]);
-        }catch(\Exception $e){
-            return "Error : ".$e->getmessage()."<br> Line No : " .$e->getline();
-        } 
+            return view('invoices.create', ['invoices' => $invoice]);
+        } catch (\Exception $e) {
+            return "Error : " . $e->getmessage() . "<br> Line No : " . $e->getline();
+        }
     }
 
     /**
@@ -40,8 +40,29 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            // 'image'               => 'required|image',
+            'bill_from'           => 'required',
+            'bill_to'             => 'required',
+            'date'                => 'required|date',
+            'payment_type'        => 'required',
+            'due_date'            => 'required|date',
+            'po_number'           => 'required',
+            'items.*.item_name'   => 'required',
+            'items.*.quantity'    => 'required',
+            'items.*.rate'        => 'required',
+            'items.*.amount'      => 'required',
+            'notes'               => 'string',
+            'terms'               => 'string',
+            'sub_total'           => 'required|numeric',
+            'total'               => 'required|numeric',
+            'paid_amount'         => 'numeric',
+            'due_amount'          => 'required|numeric',
+        ]);
+    
+        return view('invoices.index');
     }
+    
 
     /**
      * Display the specified resource.

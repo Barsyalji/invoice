@@ -1,0 +1,124 @@
+.first_div {
+    width: 90%;
+    margin-left: 5%;
+    border: 2px solid black;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    display: block;
+    padding: 1%;
+
+}
+
+.invoice {
+    padding: 1%;
+    color: cadetblue;
+    display: flex;
+    /* text-align: center;   */
+}
+
+.invoice_bill {
+    width: 48%;
+    text-align: left;
+    padding: 1%;
+    display: flexbox;
+}
+
+.invoice_bill div {
+    padding: 1%;
+}
+
+#id {
+    margin-left: 25%;
+}
+
+#date {
+    margin-left: 100px;
+}
+
+#payment_type {
+    margin-left: 5%;
+
+}
+
+#due_date {
+    margin-left: 12.5%;
+}
+
+#po_number {
+    margin-left:9%;
+}
+#sub_total{
+    margin-left: 10%;
+}
+#total{
+    margin-left: 17%;
+
+}
+#paid_amount{
+    margin-left:5%;
+}
+#due_amount{
+    margin-left: 5.2%;
+}
+#discount , #tax , #shiping{
+margin-left: 25%;
+}
+#submit{
+    background-color: green;
+    margin-left: 2%;
+    border-radius: 1cap;
+    font-weight: bold;
+    font-size: large;
+    border-color: lawngreen;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    width: 100px;
+}
+
+input {
+    width: 250px;
+    height: 3em;
+    text-align: center;
+}
+
+textarea {
+    text-align: center;
+    width: 70%;
+    height: 6em;
+    line-height: 80px;
+    vertical-align: middle;
+
+    padding: 10px;
+}
+
+.x,
+.x1 {
+    display: none;
+}
+
+#table_data tr:hover .x {
+    display: block;
+}
+#span{
+    border: 1px solid black;
+    padding: 1%;
+    background-color: darkgray;
+    border-color: lightgray;
+    color: black;
+    font-weight: bold;
+    border-radius: 2cqh;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+.error{
+    color: red;
+}
+.invoice_date{
+    padding-left: 10%;
+}
