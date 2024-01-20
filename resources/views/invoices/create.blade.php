@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="first_div">
-        <form action="{{route('invoices.store')}}" method="post" id="form_data">
+        <form action="{{route('invoices.store')}}" method="post" id="form_data" enctype="multipart/form-data">
             @csrf
             <div class="invoice">
                 <div class="invoice_bill">

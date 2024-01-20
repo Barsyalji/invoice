@@ -1,7 +1,8 @@
 .first_div {
     width: 90%;
+    background-color: lightgrey;
     margin-left: 5%;
-    border: 2px solid black;
+    border: 2px solid lightgrey;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     display: block;
     padding: 1%;
@@ -10,7 +11,7 @@
 
 .invoice {
     padding: 1%;
-    color: cadetblue;
+    color: black;
     display: flex;
     /* text-align: center;   */
 }
@@ -76,7 +77,10 @@ margin-left: 25%;
 input {
     width: 250px;
     height: 3em;
+    background-color: lightgray;
     text-align: center;
+    border: 1px solid rgb(100, 99, 99);
+    /* border-color: lightgray; */
 }
 
 textarea {
@@ -85,7 +89,7 @@ textarea {
     height: 6em;
     line-height: 80px;
     vertical-align: middle;
-
+    background-color: lightgray;
     padding: 10px;
 }
 
