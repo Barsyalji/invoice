@@ -5,97 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="{{ asset('/css/invoice.css') }}" rel="stylesheet" type="text/css">
 </head>
-<style>
-    .first_div {
-        width: 90%;
-        margin-left: 5%;
-        border: 2px solid black;
-        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-        display: block;
-        padding: 1%;
-
-    }
-
-    .invoice {
-        padding: 1%;
-        color: cadetblue;
-        display: flex;
-        /* text-align: center;   */
-    }
-
-    .invoice_bill {
-        width: 48%;
-        text-align: left;
-        padding: 1%;
-        display: flexbox;
-    }
-
-    .invoice_bill div {
-        padding: 1%;
-    }
-
-    #id {
-        margin-left: 20%;
-        width: 170px;
-
-    }
-
-    #date {
-        margin-left: 100px;
-        width: 170px;
-    }
-
-    #payment_type {
-        margin-left: 4%;
-        width: 170px;
-
-    }
-
-    #due_date {
-        margin-left: 10%;
-        width: 170px;
-    }
-
-    #po_number {
-        margin-left: 7%;
-        width: 170px;
-    }
-
-    input {
-        width: 180px;
-        height: 2em;
-        text-align: center;
-    }
-
-    textarea {
-        text-align: center;
-    }
-
-    .x,
-    .x1 {
-        display: none;
-    }
-
-    #table_data tr:hover .x {
-        display: block;
-    }
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    input[type=number] {
-        -moz-appearance: textfield;
-    }
-
-    .text-danger {
-        color: red;
-    }
-</style>
-
 <body>
     <div class="first_div">
 
@@ -208,7 +119,7 @@
                         </td>
                     </tr>
                 </table><br>
-                <button class="button" id="button">Click Me</button>
+                <span class="button" id="button">Click Me</span>
             </div>
             <div class="invoice">
                 <div class="invoice_bill">
@@ -274,81 +185,8 @@
         </form>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                var index = 0;
+        <script type="text/javascript" src="{{ asset('js/invoice.js') }}"></script>
 
-                $(".button").click(function() {
-                    ++index;
-                    var rowdata = '<tr>' +
-                        '<td><input type="text" name="items[' + index + '][item_name]" class="item_name"  placeholder="Item"></td>' +
-                        '<td><input type="number" name="items[' + index + '][quantity]" class="quantity"  placeholder="Quantity"></td>' +
-                        '<td><input type="number" name="items[' + index + '][rate]" class="rate"  placeholder="Rate"></td>' +
-                        '<td><input type="number" name="items[' + index + '][amount]" class="amount" placeholder="Amount"></td>' +
-                        '<td><button class="x"><b>x</b></button></td>' +
-                        '</tr>';
-                    $('#table_data').append(rowdata);
-                    $('.x').on('click', function() {
-                        var row = $(this).closest('tr');
-                        row.remove();
-                    });
-                });
-                $('#table_data').on('input', '.rate, .quantity', function() {
-                    var row = $(this).closest('tr');
-                    var rate = parseFloat(row.find('.rate').val()) || 0;
-                    var quantity = parseFloat(row.find('.quantity').val()) || 0;
-                    var amount = rate * quantity;
-
-                    row.find('.amount').val(amount.toFixed(2));
-                    totalSum();
-                });
-                $('.invoice_bill').on('input', 'input[name="discount"], input[name="tax"], input[name="shiping"], input[name="paid_amount"]', function() {
-                    console.log("Input changed!");
-                    totalSum();
-                });
-
-                $('.discount').click(function() {
-                    $('.discount_field').append('<br><input type="number" id="discount" name="discount" placeholder="Discount"><button class="x1"><b>x</b></button><br>');
-                    $(this).hide();
-                });
-
-                $('.tax').click(function() {
-                    $('.tax_field').append('<br><input type="number" class="tax" name="tax" placeholder="Tax"><button class="x1"><b>x</b></button><br>');
-                    $(this).hide();
-                });
-
-                $('.shiping').click(function() {
-                    $('.shiping_field').append('<br><input type="number" class="shiping" name="shiping" placeholder="Shipping"><button class="x1"><b>x</b></button><br>');
-                    $(this).hide();
-                });
-
-                function totalSum() {
-                    var totalAmount = 0;
-                    var total = 0;
-                    // Amount filed data gat and add all
-                    $('.amount').each(function() {
-                        var amount = parseFloat($(this).val()) || 0;
-                        totalAmount += amount;
-                    })
-                    $('#sub_total').val(totalAmount.toFixed(2));
-                    //get data discount filed
-                    var discount = parseFloat($("input[name=discount]").val()) || 0;
-                    discount = (discount * totalAmount) / 100;
-                    total = totalAmount - discount;
-                    //get data discount filed
-                    var tax = parseFloat($("input[name=tax]").val()) || 0;
-                    tax = (tax * total) / 100;
-                    //get data discount filed
-                    var shiping = parseFloat($("input[name=shiping]").val()) || 0;
-                    total = total + tax + shiping;
-                    $('#total').val(total.toFixed(2))
-                    var paid_amount = parseFloat($("input[name=paid_amount]").val()) || 0;
-                    paid_amount = total - paid_amount;
-                    $('#due_amount').val(paid_amount.toFixed(2));
-                }
-
-            });
-        </script>
 </body>
 
 </html>

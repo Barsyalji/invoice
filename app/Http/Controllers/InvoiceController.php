@@ -14,8 +14,7 @@ class InvoiceController extends Controller
     public function index()
     {
         try {
-            // $invoice = Invoice::all();
-            $invoice = 'atul';
+            $invoice = Invoice::withCount('items')->get();
             return view('invoices.index', ['invoices' => $invoice]);
         } catch (\Exception $e) {
             return "Error : " . $e->getmessage() . "<br> Line No : " . $e->getline();
@@ -28,6 +27,7 @@ class InvoiceController extends Controller
     public function create()
     {
         try {
+            dd('atul');
             $invoice = Invoice::latest()->first('id');
             return view('invoices.create', ['id' => $invoice->id]);
         } catch (\Exception $e) {
