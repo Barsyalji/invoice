@@ -56,9 +56,14 @@
             <td>{{ $invoice->paid_amount }}</td>
             <td>{{ $invoice->due_amount }}</td>
             <td> {{ $invoice->items_count}}</td>
-            <td><a href="{{ route('invoices.destroy',$invoice->id) }}"><button class="delete">Delete</button></a>
-            <a href="http://"><button class="show">Show</button></a>
-            <a href="http://"><button class="update">Update</button></a>
+            <td>
+               <form action="{{ route('invoices.destroy',$invoice->id) }}" method="post">
+                @csrf
+                @method('DELETE')
+                <input type="submit" value="Delete">
+               </form>
+            <a href="{{ route('invoices.show',$invoice->id) }}"><button class="show">Show</button></a>
+            <!-- <a href="http://"><button class="update">Update</button></a> -->
         </td>
             </tr>
 

@@ -27,7 +27,6 @@ class InvoiceController extends Controller
     public function create()
     {
         try {
-            dd('atul');
             $invoice = Invoice::latest()->first('id');
             return view('invoices.create', ['id' => $invoice->id]);
         } catch (\Exception $e) {
@@ -90,7 +89,8 @@ class InvoiceController extends Controller
      */
     public function show(Invoice $invoice)
     {
-        //
+        $invoice = $invoice->with('items')->where('id',$invoice->id)->get() ;
+        return view('invoices.show',['invoices' => $invoice]);
     }
 
     /**
@@ -114,6 +114,7 @@ class InvoiceController extends Controller
      */
     public function destroy(Invoice $invoice)
     {
-        //
+        $invoice->delete();
+        return redirect()->back();
     }
 }
