@@ -96,9 +96,9 @@ class InvoiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Invoice $invoice)
-    {
-        //
+    public function edit(Invoice $invoice){
+      $invoice = $invoice->with('items')->where('id',$invoice->id)->get() ;
+      return view("invoices.edit",['invoice'=>$invoice]);
     }
 
     /**
@@ -113,7 +113,7 @@ class InvoiceController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Invoice $invoice)
-    {
+    {   $invoice->items()->delete();
         $invoice->delete();
         return redirect()->back();
     }

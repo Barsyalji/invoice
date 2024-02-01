@@ -63,9 +63,12 @@ textarea {
     text-align: center;
 }
 
-.x,
-.x1 {
+.x {
     display: none;
+    text-align: center;
+    width: 30px;
+    border: 1px solid black;
+    background-color: lightgray;
 }
 
 #table_data tr:hover .x {

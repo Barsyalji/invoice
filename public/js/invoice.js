@@ -1,20 +1,24 @@
 $(document).ready(function() {
     var index = 0;
-
     $(".button").click(function() {
         ++index;
         var rowdata = '<tr>' +
             '<td><input type="text" name="items[' + index + '][item_name]" class="item_name"  placeholder="Item"></td>' +
             '<td><input type="number" name="items[' + index + '][quantity]" class="quantity"  placeholder="Quantity"></td>' +
             '<td><input type="number" name="items[' + index + '][rate]" class="rate"  placeholder="Rate"></td>' +
-            '<td><input type="number" name="items[' + index + '][amount]" class="amount" placeholder="Amount"></td>' +
-            '<td><button class="x"><b>x</b></button></td>' +
+            '<td><input type="number" name="items[' + index + '][amount]" class="amount" placeholder="Amount" readonly></td>' +
+            '<td><span class="x"><b>x</b></span></td>' +
             '</tr>';
-        $('#table_data').append(rowdata);
-        $('.x').on('click', function() {
-            var row = $(this).closest('tr');
+            $('#table_data').append(rowdata);
+
+    });
+    $('.x').on('click', function() {
+        var row = $(this).closest('tr');
+        var count = document.querySelectorAll(".x").length;
+        if(count > 1){
             row.remove();
-        });
+        }
+
     });
     $('#table_data').on('input', '.rate, .quantity', function() {
         var row = $(this).closest('tr');

@@ -63,7 +63,7 @@
                 <input type="submit" value="Delete">
                </form>
             <a href="{{ route('invoices.show',$invoice->id) }}"><button class="show">Show</button></a>
-            <!-- <a href="http://"><button class="update">Update</button></a> -->
+            <a href="{{ route('invoices.edit',$invoice->id) }}"><button class="update">Edit</button></a>
         </td>
             </tr>
 

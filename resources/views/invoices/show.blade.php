@@ -34,7 +34,10 @@
   }
   .invoice-details .left,
   .invoice-details .right {
-    width: 48%;
+    width: 35%;
+  }
+  .invoice-details .right2 {
+    width: 25%;
   }
   .invoice-items {
     margin-bottom: 20px;
@@ -53,16 +56,18 @@
     background-color: #f2f2f2;
   }
   .invoice-total {
-    display: flex;
+    display: block;
     justify-content: flex-end;
     margin-top: 20px;
   }
   .invoice-total p {
     font-weight: bold;
   }
+
   .download-btn {
     display: block;
-    width: 100%;
+
+    width: 48%;
     padding: 10px;
     text-align: center;
     background-color: #007bff;
@@ -75,22 +80,37 @@
   .download-btn:hover {
     background-color: #0056b3;
   }
+  .dow-save{
+    display: flex;
+    gap: 2%;
+    padding-left: 1%;
+  }
+  textarea{
+    border: 0px;
+    padding: 2%;
+  }
 </style>
 </head>
 <body>
+@foreach ($invoices as $invoice )
 
+@endforeach
 <div class="invoice-container">
   <div class="invoice-header">
-    <h1>Invoice</h1>
+    <h1>Invoice </h1>
   </div>
   <div class="invoice-details">
     <div class="left">
-      <p><strong>Invoice Number:</strong> INV-001</p>
-      <p><strong>Invoice Date:</strong> January 1, 2024</p>
+    <p><strong>Billed To:</strong> {{$invoice->bill_to}}</p>
+    <p><strong>Billed To:</strong> {{$invoice->bill_to}}</p>
+      <p><strong>Ship To:</strong> {{$invoice->ship_to}}</p>
+      <p><strong>Invoice Date:</strong> {{$invoice->date}} </p>
     </div>
     <div class="right">
-      <p><strong>Billed To:</strong> John Doe</p>
-      <p><strong>Email:</strong> john.doe@example.com</p>
+    <p><strong>Invoice Number:</strong> {{$invoice->id}} </p>
+    <p><strong>Payment Type:</strong> {{$invoice->payment_type}} </p>
+       <p><strong>Due Date:</strong> {{$invoice->due_date}} </p>
+      <p><strong>Po Number:</strong> {{$invoice->po_number}} </p>
     </div>
   </div>
   <div class="invoice-items">
@@ -104,27 +124,43 @@
         </tr>
       </thead>
       <tbody>
+        @foreach ($invoice->items as $item)
         <tr>
-          <td>Item 1</td>
-          <td>2</td>
-          <td>$10.00</td>
-          <td>$20.00</td>
+          <td>{{ $item->item_name}}</td>
+          <td>{{ $item->quantity}}</td>
+          <td>{{ $item->rate}}</td>
+          <td>{{ $item->amount}}</td>
         </tr>
-        <tr>
-          <td>Item 2</td>
-          <td>1</td>
-          <td>$15.00</td>
-          <td>$15.00</td>
-        </tr>
+        @endforeach
       </tbody>
     </table>
   </div>
-  <div class="invoice-total">
-    <p><strong>Total:</strong> $35.00</p>
+  <div class="invoice-details">
+    <div class="left">
+    <p><strong>Notes:</strong><br>
+    <textarea  cols="35" rows="6" readonly>{{$invoice->notes}}</textarea>
+   </p>
+   <p><strong>Terms:</strong><br>
+    <textarea  cols="35" rows="6" readonly>{{$invoice->terms}}</textarea>
+   </p>
+    </div>
+    <div class="right2" style=" margin-left: 20px;">
+    <p><strong>Sum Total:</strong>{{$invoice->sub_total}}</p>
+    <p><strong>Discount:</strong> {{$invoice->discount}}</p>
+    <p><strong>Tax:</strong>{{$invoice->tax}}</p>
+    <p><strong>Shiping:</strong>{{$invoice->shiping}}</p>
+    <p><strong>Total:</strong> {{$invoice->total}}</p>
+    <p><strong>Pad Amount:</strong>{{$invoice->paid_amount}}</p>
+    <p><strong>Due Amount:</strong>{{$invoice->due_amount}}</p>
+    </div>
   </div>
-  <button class="download-btn" onclick="downloadPDF()">Download PDF</button>
-  <button class="download-btn" onclick="printInvoice()">Print Invoice</button>
+  <div class="invoice-total">
 
+  </div>
+  <div class="dow-save">
+  <button class="download-btn" onclick="downloadPDF()">Download PDF</button><br>
+  <button class="download-btn" onclick="printInvoice()">Print Invoice</button>
+</div>
 </div>
 <script>
   function printInvoice() {
