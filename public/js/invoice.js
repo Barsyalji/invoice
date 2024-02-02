@@ -3,7 +3,10 @@ $(document).ready(function() {
     $(".button").click(function() {
         ++index;
         var rowdata = '<tr>' +
-            '<td><input type="text" name="items[' + index + '][item_name]" class="item_name"  placeholder="Item"></td>' +
+
+            '<td>'+
+           '<input type="hidden" name="items[' + index + '][id]"" class="item_name" value="" placeholder="Item">'+
+            '<input type="text" name="items[' + index + '][item_name]" class="item_name"  placeholder="Item"></td>' +
             '<td><input type="number" name="items[' + index + '][quantity]" class="quantity"  placeholder="Quantity"></td>' +
             '<td><input type="number" name="items[' + index + '][rate]" class="rate"  placeholder="Rate"></td>' +
             '<td><input type="number" name="items[' + index + '][amount]" class="amount" placeholder="Amount" readonly></td>' +

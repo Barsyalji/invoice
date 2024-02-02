@@ -13,9 +13,9 @@
 <body>
     <div class="first_div">
 @foreach ($invoice as $invoice)
-        <!-- <form action="{{ route('invoices.store') }}" method="post" id="form_data" enctype="multipart/form-data">
-            @csrf -->
-
+        <form action="{{ route('invoices.update',$invoice->id) }}" method="post" id="form_data" enctype="multipart/form-data">
+            @csrf
+            @method("PUT")
             <div class="invoice">
                 <div class="invoice_bill">
                     <div>
@@ -95,6 +95,7 @@
                     @foreach ($invoice->items as $items)
                     <tr>
                         <td>
+                            <input type="hidden" name="items[0][id]" class="item_name" value="{{ $items->id}}" placeholder="Item">
                             <input type="text" name="items[0][item_name]" class="item_name" value="{{ $items->item_name}}" placeholder="Item">
                             @error('items.*.item_name')
 
@@ -188,7 +189,7 @@
                     <input type="submit" value="Submit">
                 </div>
             </div>
-        <!-- </form> -->
+        </form>
         @endforeach
 
 

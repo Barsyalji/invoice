@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class InvoiceController extends Controller
 {
@@ -17,7 +19,9 @@ class InvoiceController extends Controller
             $invoice = Invoice::withCount('items')->get();
             return view('invoices.index', ['invoices' => $invoice]);
         } catch (\Exception $e) {
-            return "Error : " . $e->getmessage() . "<br> Line No : " . $e->getline();
+            report($e);
+            Log::error('Error occurred while storing invoice: ' . $e->getMessage());
+            return redirect()->back()->with('messege', 'Something Went Wrong');
         }
     }
 
@@ -30,7 +34,9 @@ class InvoiceController extends Controller
             $invoice = Invoice::latest()->first('id');
             return view('invoices.create', ['id' => $invoice->id]);
         } catch (\Exception $e) {
-            return "Error : " . $e->getmessage() . "<br> Line No : " . $e->getline();
+            report($e);
+            Log::error('Error occurred while storing invoice: ' . $e->getMessage());
+            return redirect()->back()->with('messege', 'Something Went Wrong');
         }
     }
 
@@ -41,7 +47,7 @@ class InvoiceController extends Controller
     {
         $request->validate(
             [
-                'image'         => 'required',
+                'image'         => 'required|image|max:2048',
                 'bill_from'     => 'required|string',
                 'bill_to'       => 'required|string',
                 'date'          => 'required|date',
@@ -70,6 +76,11 @@ class InvoiceController extends Controller
             ]
         );
         try {
+            DB::beginTransaction();
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $request['image'] = Storage::disk('public')->put('images', $image);
+            }
             $data = $request->except(['_token', 'items',]);
             $model = Invoice::create($data);
             foreach ($request->items as $item) {
@@ -77,10 +88,13 @@ class InvoiceController extends Controller
                 $item = array_merge(['invoice_id' => $id], $item);
                 $model->items()->create($item);
             }
-            return view('invoices.index');
+            DB::commit();
+            return redirect('invoices');
         } catch (\Exception $e) {
+            DB::rollBack();
             report($e);
             Log::error('Error occurred while storing invoice: ' . $e->getMessage());
+            return redirect()->back()->with('messege', 'Something Went Wrong');
         }
     }
 
@@ -89,16 +103,23 @@ class InvoiceController extends Controller
      */
     public function show(Invoice $invoice)
     {
-        $invoice = $invoice->with('items')->where('id',$invoice->id)->get() ;
-        return view('invoices.show',['invoices' => $invoice]);
+        try {
+            $invoice = $invoice->with('items')->where('id', $invoice->id)->get();
+            return view('invoices.show', ['invoices' => $invoice]);
+        } catch (\Exception $e) {
+            report($e);
+            Log::error('Error occurred while storing invoice: ' . $e->getMessage());
+            return redirect()->back()->with('messege', 'Something Went Wrong');
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Invoice $invoice){
-      $invoice = $invoice->with('items')->where('id',$invoice->id)->get() ;
-      return view("invoices.edit",['invoice'=>$invoice]);
+    public function edit(Invoice $invoice)
+    {
+        $invoice = $invoice->with('items')->where('id', $invoice->id)->get();
+        return view("invoices.edit", ['invoice' => $invoice]);
     }
 
     /**
@@ -106,15 +127,73 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, Invoice $invoice)
     {
-        //
+        $request->validate(
+            [
+                'image'         => 'required|image|max:2048',
+                'bill_from'     => 'required|string',
+                'bill_to'       => 'required|string',
+                'date'          => 'required|date',
+                'payment_type'  => 'required|string',
+                'due_date'      => 'required|date',
+                'po_number'     => 'nullable|numeric',
+                'notes'         => 'nullable|string',
+                'terms'         => 'nullable|string',
+                'sub_total'     => 'required|numeric',
+                'discount'      => 'nullable|numeric',
+                'tax'           => 'nullable|numeric',
+                'shiping'       => 'nullable|numeric',
+                'total'         => 'required|numeric',
+                'paid_amount'   => 'nullable|numeric',
+                'due_amount'    => 'nullable|numeric',
+                'items.*.item_name'  => 'required',
+                'items.*.quantity'   => 'required|numeric',
+                'items.*.rate'       => 'required|numeric',
+                'items.*.amount'     => 'required|numeric',
+            ],
+            [
+                'items.*.item_name.required' => 'The item name field is required',
+                'items.*.quantity.required'  => 'The quantity field is required',
+                'items.*.rate.required'      => 'The rate field is required',
+                'items.*.amount.required'    => 'The amount field is required',
+            ]
+        );
+        try {
+            DB::beginTransaction();
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $request['image'] = Storage::disk('public')->put('images', $image);
+            }
+            $invoiceData = $request->all();
+            $invoice->update($invoiceData);
+            foreach ($request->items as $item) {
+                $invoice->items()->updateOrCreate(['id' => $item['id']], $item);
+            }
+            DB::commit();
+            return redirect('invoices')->with('messege', 'update sucess');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            report($e);
+            Log::error('invoice_update_exception', $e->getMessage());
+            return redirect()->back()->with('messege', 'Something Went Wrong');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Invoice $invoice)
-    {   $invoice->items()->delete();
-        $invoice->delete();
-        return redirect()->back();
+    {
+        try {
+            DB::beginTransaction();
+            $invoice->items()->delete();
+            $invoice->delete();
+            DB::commit();
+            return redirect()->back();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            report($e);
+            Log::error('Delete_invoice_error', $e->getMessage());
+            return redirect()->back();
+        }
     }
 }
