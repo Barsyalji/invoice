@@ -177,7 +177,7 @@
                         @enderror
                     </div>
                 </div>
-                <div class="col-sm-5 ps-2 row gap-1">
+                <div class="col-sm-5 ps-2 row gap-1 invoice_bill">
                     <div class="row gx-4 ">
                         <span class="col fw-bold">Sub Total</span>
                         <input class="col" type="number" name="sub_total" id="sub_total" placeholder="Sub Total"
@@ -189,7 +189,7 @@
                     <div class="ps-7 fw-bold d-grid">
                         <div class="row">
                             <div class="col-12 float-lg-end">
-                                <div class="d-grid float-lg-end invoice_bill ">
+                                <div class="d-grid float-lg-end  ">
                                     <span class="discount"> + Discount</span>
                                     <span class="discount_field"></span>
                                     <span class="tax"> + Tax</span>

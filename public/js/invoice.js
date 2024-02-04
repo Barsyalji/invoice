@@ -52,7 +52,6 @@ $(document).ready(function() {
         totalSum();
     });
     $('.invoice_bill').on('input', 'input[name="discount"], input[name="tax"], input[name="shipping"], input[name="paid_amount"]', function() {
-        console.log("Input changed!");
         totalSum();
     });
 
