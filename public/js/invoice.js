@@ -1,28 +1,47 @@
+
 $(document).ready(function() {
     var index = 0;
+    document.getElementById('image').addEventListener('change', function() {
+        var file = this.files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                document.getElementById('imageLabel').style.display = 'none';
+                document.getElementById('imageDisplay').style.display = 'block';
+                document.getElementById('imageDisplay').src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
     $(".button").click(function() {
         ++index;
         var rowdata = '<tr>' +
-
             '<td>'+
-           '<input type="hidden" name="items[' + index + '][id]"" class="item_name" value="" placeholder="Item">'+
+            '<input type="hidden" name="items[' + index + '][id]"" class="item_name" value="" placeholder="Item">'+
             '<input type="text" name="items[' + index + '][item_name]" class="item_name"  placeholder="Item"></td>' +
             '<td><input type="number" name="items[' + index + '][quantity]" class="quantity"  placeholder="Quantity"></td>' +
             '<td><input type="number" name="items[' + index + '][rate]" class="rate"  placeholder="Rate"></td>' +
             '<td><input type="number" name="items[' + index + '][amount]" class="amount" placeholder="Amount" readonly></td>' +
-            '<td><span class="x"><b>x</b></span></td>' +
+            ' <td><div class=" x text-dark border-teansprant">&#x2718; </div></td>' +
             '</tr>';
             $('#table_data').append(rowdata);
 
     });
-    $('.x').on('click', function() {
-        var row = $(this).closest('tr');
-        var count = document.querySelectorAll(".x").length;
-        if(count > 1){
-            row.remove();
+        var table = document.getElementById('table_data');
+        var rowCount = table.getElementsByTagName('tbody')[0].rows.length;
+        if(rowCount <= 2){
+            $('.x').css('display', 'none');
         }
 
-    });
+        table.addEventListener('click', function(event) {
+            if ($(event.target).hasClass('x')) {
+                var row = $(event.target).closest('tr');
+                var id = parseFloat(row.find('.item_id').val()) || 0;
+                console.log(id);
+                $('#form_data').append('<input type="hidden" name="uid[]" value="' + id + '">');
+                row.remove();
+            }
+        });
     $('#table_data').on('input', '.rate, .quantity', function() {
         var row = $(this).closest('tr');
         var rate = parseFloat(row.find('.rate').val()) || 0;
@@ -38,17 +57,17 @@ $(document).ready(function() {
     });
 
     $('.discount').click(function() {
-        $('.discount_field').append('<br><input type="number" id="discount" name="discount" placeholder="Discount"><button class="x1"><b>x</b></button><br>');
+        $('.discount_field').append('<input class="col" type="number" id="discount" name="discount" placeholder="Discount">');
         $(this).hide();
     });
 
     $('.tax').click(function() {
-        $('.tax_field').append('<br><input type="number" class="tax" name="tax" placeholder="Tax"><button class="x1"><b>x</b></button><br>');
+        $('.tax_field').append('<input type="number" class="tax" name="tax" placeholder="Tax">');
         $(this).hide();
     });
 
     $('.shipping').click(function() {
-        $('.shipping_field').append('<br><input type="number" class="shipping" name="shipping" placeholder="Shipping"><button class="x1"><b>x</b></button><br>');
+        $('.shipping_field').append('<input type="number" class="shipping" name="shipping" placeholder="Shipping">');
         $(this).hide();
     });
 
@@ -76,5 +95,4 @@ $(document).ready(function() {
         paid_amount = total - paid_amount;
         $('#due_amount').val(paid_amount.toFixed(2));
     }
-
 });

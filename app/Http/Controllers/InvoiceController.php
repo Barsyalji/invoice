@@ -15,13 +15,12 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-
         try {
             $invoice = Invoice::withCount('items')->get();
             return view('invoices.index', ['invoices' => $invoice]);
         } catch (\Exception $e) {
             report($e);
-            Log::error('Error occurred while storing invoice: ' . $e->getMessage());
+            Log::error('Error occurred while storing invoice: ',['erroe' => $e->getMessage()]);
             return redirect()->back()->with('messege', 'Something Went Wrong');
         }
     }
@@ -37,7 +36,7 @@ class InvoiceController extends Controller
             return view('invoices.create', ['id' => $id]);
         } catch (\Exception $e) {
             report($e);
-            Log::error('Error occurred while storing invoice: ' . $e->getMessage());
+            Log::error('Error occurred while storing invoice: ' ,['erroe' => $e->getMessage()]);
             return redirect()->back()->with('messege', 'Something Went Wrong');
         }
     }
@@ -64,7 +63,7 @@ class InvoiceController extends Controller
                 'shipping'       => 'nullable|numeric',
                 'total'         => 'required|numeric',
                 'paid_amount'   => 'nullable|numeric',
-                'due_amount'    => 'nullable|numeric',
+                'due_amount'    => 'required|numeric',
                 'items.*.item_name'  => 'required',
                 'items.*.quantity'   => 'required|numeric',
                 'items.*.rate'       => 'required|numeric',
@@ -84,6 +83,9 @@ class InvoiceController extends Controller
                 $request['image'] = Storage::disk('public')->put('images', $image);
             }
             $data = $request->except(['_token', 'items',]);
+            if(empty($data['paid_amount'])){
+                $data['paid_amount'] = 0;
+            }
             $model = Invoice::create($data);
             foreach ($request->items as $item) {
                 $id = $model->id;
@@ -95,7 +97,7 @@ class InvoiceController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             report($e);
-            Log::error('Error occurred while storing invoice: ' . $e->getMessage());
+            Log::error('Error occurred while storing invoice: ',['erroe' => $e->getMessage()]);
             return redirect()->back()->with('messege', 'Something Went Wrong');
         }
     }
@@ -110,7 +112,7 @@ class InvoiceController extends Controller
             return view('invoices.show', ['invoices' => $invoice]);
         } catch (\Exception $e) {
             report($e);
-            Log::error('Error occurred while storing invoice: ' . $e->getMessage());
+            Log::error('Error occurred while storing invoice: ' ,['erroe' => $e->getMessage()]);
             return redirect()->back()->with('messege', 'Something Went Wrong');
         }
     }
@@ -120,8 +122,14 @@ class InvoiceController extends Controller
      */
     public function edit(Invoice $invoice)
     {
+        try {
         $invoice = $invoice->with('items')->where('id', $invoice->id)->get();
         return view("invoices.edit", ['invoice' => $invoice]);
+    } catch (\Exception $e) {
+        report($e);
+        Log::error('Error occurred while storing invoice: ' ,['erroe' => $e->getMessage()]);
+        return redirect()->back()->with('messege', 'Something Went Wrong');
+    }
     }
 
     /**
@@ -167,6 +175,9 @@ class InvoiceController extends Controller
             }
             $invoiceData = $request->all();
             $invoice->update($invoiceData);
+            foreach ($request->uid as $value) {
+                $invoice->items()->where('id',$value)->delete();
+            }
             foreach ($request->items as $item) {
                 $invoice->items()->updateOrCreate(['id' => $item['id']], $item);
             }
@@ -175,7 +186,7 @@ class InvoiceController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             report($e);
-            Log::error('invoice_update_exception', $e->getMessage());
+            Log::error('invoice_update_exception',['erroe' => $e->getMessage()]);
             return redirect()->back()->with('messege', 'Something Went Wrong');
         }
     }
@@ -194,7 +205,7 @@ class InvoiceController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             report($e);
-            Log::error('Delete_invoice_error', $e->getMessage());
+            Log::error('Delete_invoice_error',['erroe' => $e->getMessage()]);
             return redirect()->back();
         }
     }
