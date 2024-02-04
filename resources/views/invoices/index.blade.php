@@ -28,7 +28,7 @@
                 <th>Sub Total</th>
                 <th>Discount</th>
                 <th>Tax</th>
-                <th>Shiping</th>
+                <th>shipping</th>
                 <th>Total</th>
                 <th>Pay Amount</th>
                 <th>Due Amount</th>
@@ -51,7 +51,7 @@
             <td>{{ $invoice->sub_total }}</td>
             <td>{{ $invoice->discount }}</td>
             <td>{{ $invoice->tax }}</td>
-            <td>{{ $invoice->shiping }}</td>
+            <td>{{ $invoice->shipping }}</td>
             <td>{{ $invoice->total }}</td>
             <td>{{ $invoice->paid_amount }}</td>
             <td>{{ $invoice->due_amount }}</td>

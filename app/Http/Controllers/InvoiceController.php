@@ -15,6 +15,7 @@ class InvoiceController extends Controller
      */
     public function index()
     {
+
         try {
             $invoice = Invoice::withCount('items')->get();
             return view('invoices.index', ['invoices' => $invoice]);
@@ -32,7 +33,8 @@ class InvoiceController extends Controller
     {
         try {
             $invoice = Invoice::latest()->first('id');
-            return view('invoices.create', ['id' => $invoice->id]);
+            $id =!empty($invoice->id)? ++$invoice->id : 1;
+            return view('invoices.create', ['id' => $id]);
         } catch (\Exception $e) {
             report($e);
             Log::error('Error occurred while storing invoice: ' . $e->getMessage());
@@ -59,7 +61,7 @@ class InvoiceController extends Controller
                 'sub_total'     => 'required|numeric',
                 'discount'      => 'nullable|numeric',
                 'tax'           => 'nullable|numeric',
-                'shiping'       => 'nullable|numeric',
+                'shipping'       => 'nullable|numeric',
                 'total'         => 'required|numeric',
                 'paid_amount'   => 'nullable|numeric',
                 'due_amount'    => 'nullable|numeric',
@@ -141,7 +143,7 @@ class InvoiceController extends Controller
                 'sub_total'     => 'required|numeric',
                 'discount'      => 'nullable|numeric',
                 'tax'           => 'nullable|numeric',
-                'shiping'       => 'nullable|numeric',
+                'shipping'       => 'nullable|numeric',
                 'total'         => 'required|numeric',
                 'paid_amount'   => 'nullable|numeric',
                 'due_amount'    => 'nullable|numeric',

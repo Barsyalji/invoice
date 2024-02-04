@@ -26,7 +26,7 @@ return new class extends Migration
             $table->double('sub_total');
             $table->double('discount')->default(0);
             $table->double('tax')->default(0);
-            $table->double('shiping')->default(0);
+            $table->double('shipping')->default(0);
             $table->double('total');
             $table->double('paid_amount')->default(0);
             $table->double('due_amount');

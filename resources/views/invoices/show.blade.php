@@ -148,7 +148,7 @@
     <p><strong>Sum Total:</strong>{{$invoice->sub_total}}</p>
     <p><strong>Discount:</strong> {{$invoice->discount}}</p>
     <p><strong>Tax:</strong>{{$invoice->tax}}</p>
-    <p><strong>Shiping:</strong>{{$invoice->shiping}}</p>
+    <p><strong>shipping:</strong>{{$invoice->shipping}}</p>
     <p><strong>Total:</strong> {{$invoice->total}}</p>
     <p><strong>Pad Amount:</strong>{{$invoice->paid_amount}}</p>
     <p><strong>Due Amount:</strong>{{$invoice->due_amount}}</p>

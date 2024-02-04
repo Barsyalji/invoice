@@ -4,92 +4,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="{{ asset('/css/invoice.css') }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ asset('boot/css/bootstrap.min.css')}}">
+    <script src="boot/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="{{ asset('js/invoice.js') }}"></script>
 </head>
-<body>
-    <div class="first_div">
+<body class="bg-body-secondary lead d-flex">
+    <div class="col-sm-11 border border-gray ms-5 p-5 mt-2 bg-body-tertiary d-flex row gap-3">
 
         <form action="{{ route('invoices.store') }}" method="post" id="form_data" enctype="multipart/form-data">
             @csrf
-
-            <div class="invoice">
-                <div class="invoice_bill">
+            <div class="d-flex P-2 ">
+                <div class="col-sm-7 ps-2 row gap-3">
                     <div>
-                        <input type="file" name="image" id="image">
+                        <input type="file" name="image" class="hidden" id="image" hidden>
+                        <label for="image" class="border border-gray col-sm-3 text-center fw-bold">Image</label>
                         @error('image')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div>
-                        <span>Bill From</span><br>
-                        <textarea name="bill_from" id="bill_from" cols="30" rows="4" placeholder="Bill From">{{ old('bill_from') }}</textarea>
+                        <span class="col fw-bold">Bill From</span><br>
+                        <textarea name="bill_from" id="bill_from" cols="30" rows="2" placeholder="Bill From">{{ old('bill_from') }}</textarea>
                         @error('bill_from')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div>
-                        <span>Bill To</span><br>
-                        <textarea name="bill_to" id="bill_to" cols="30" rows="4" placeholder="Bill To">{{ old('bill_to') }}</textarea>
+                        <span class="col fw-bold">Bill To</span><br>
+                        <textarea name="bill_to" id="bill_to" cols="30" rows="2" placeholder="Bill To">{{ old('bill_to') }}</textarea>
                         @error('bill_to')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div>
-                        <span>Ship To</span><br>
-                        <textarea name="ship_to" id="ship_to" cols="30" rows="4" placeholder="Ship To">{{ old('ship_to') }}</textarea>
+                        <span class="col fw-bold">Ship To</span><br>
+                        <textarea name="ship_to" id="ship_to" cols="30" rows="2" placeholder="Ship To">{{ old('ship_to') }}</textarea>
                         @error('ship_to')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
-                <div class="invoice_bill">
-                    <div style="margin-left: 40%;">
-                        <p><b>INVOICE</b></p>
+                <div class="col-sm-5 ps-2 row gap-1">
+                    <div class="col-3 offset-sm-8">
+                        <p class="fw-bold"><b>INVOICE</b></p>
                     </div>
-                    <div>
-                        <span>#</span>
-                        <input type="number" id="id" value="{{ $id ? ++$id : 1 }}" readonly>
+                    <div class="row gx-4 ">
+                        <span class="col fw-bold">#</span>
+                        <input class="col" type="number" id="id" value="{{ $id }}" readonly>
                     </div>
-                    <div>
-                        <span>Date</span>
-                        <input type="date" name="date" id="date" value="{{ old('date') }}">
+                    <div class="row gx-4">
+                        <span class="col fw-bold">Date</span>
+                        <input class="col" type="date" name="date" id="date" value="{{ old('date') }}">
                         @error('date')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div>
-                        <span>Payment Type</span>
-                        <input type="text" name="payment_type" id="payment_type" placeholder="Payment Type" value="{{ old('payment_type') }}">
+                    <div class="row gx-4 ">
+                        <span class="col fw-bold">Payment Type</span>
+                        <input class="col" type="text" name="payment_type" id="payment_type" placeholder="Payment Type" value="{{ old('payment_type') }}">
                         @error('payment_type')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div>
-                        <span>Due Date</span>
-                        <input type="date" name="due_date" id="due_date" value="{{ old('due_date') }}">
+                    <div class="row gx-4 ">
+                        <span class="col fw-bold">Due Date</span>
+                        <input class="col" type="date" name="due_date" id="due_date" value="{{ old('due_date') }}">
                         @error('due_date')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div>
-                        <span>PO Number</span>
-                        <input type="number" name="po_number" id="po_number" value="{{ old('po_number') }}">
+                    <div class="row gx-4 ">
+                        <span class="col fw-bold">PO Number</span>
+                        <input class="col" type="number" name="po_number" id="po_number" value="{{ old('po_number') }}">
                         @error('po_number')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
             </div>
-            <div style="padding:1%">
-                <table id="table_data">
+            <div class=" row gap-2 d-grid">
+                <table id="table_data" class="col">
                     <tr>
                         <th>Item</th>
                         <th>Quantity</th>
                         <th>Rate</th>
                         <th>Amount</th>
                     </tr>
-                    <tr>
+                    <tr class="">
                         <td>
                             <input type="text" name="items[0][item_name]" class="item_name" value="{{ old('items.0.item_name') }}" placeholder="Item">
                             @error('items.*.item_name')
@@ -117,36 +118,39 @@
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </td>
+                        <td>
+                            <div class="x text-dark border-teansprant">&#x2718; </div>
+                        </td>
                     </tr>
-                </table><br>
-                <span class="button" id="button">Click Me</span>
+                </table>
+                <div class="text-dark border border-gray text-body-tertiary col-1 fw-bold " id="button">Click Me</div>
             </div>
-            <div class="invoice">
-                <div class="invoice_bill">
+            <div class="d-flex P-2 ">
+                <div class="col-sm-7 ps-2 row gap-3">
                     <div>
-                        <span>Notes</span><br>
-                        <textarea name="notes" id="notes" cols="30" rows="4" placeholder="Notes">{{ old('notes') }}</textarea>
+                        <span class="col fw-bold">Notes</span><br>
+                        <textarea name="notes" id="notes" cols="30" rows="2" placeholder="Notes">{{ old('notes') }}</textarea>
                         @error('notes')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div>
-                        <span>Terms</span><br>
-                        <textarea name="terms" id="terms" cols="30" rows="4" placeholder="Terms">{{ old('terms') }}</textarea>
+                        <span class="col fw-bold">Terms</span><br>
+                        <textarea name="terms" id="terms" cols="30" rows="2" placeholder="Terms">{{ old('terms') }}</textarea>
                         @error('terms')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
-                <div class="invoice_bill">
-                    <div>
-                        <span>Sub Total</span>
-                        <input type="number" name="sub_total" id="sub_total" placeholder="Sub Total" value="{{ old('sub_total') }}" readonly>
+                <div class="col-sm-5 ps-2 row gap-1">
+                    <div class="row gx-4 ">
+                        <span class="col fw-bold">Sub Total</span>
+                        <input class="col" type="number" name="sub_total" id="sub_total" placeholder="Sub Total" value="{{ old('sub_total') }}" readonly>
                         @error('sub_total')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div>
+                    <div class="ps-5 fw-bold d-grid ">
                         <span class="discount"> + Discount</span>
                         <span class="discount_field"></span>
                         <span class="tax"> + Tax</span>
@@ -154,23 +158,23 @@
                         <span class="shipping"> + Shipping</span>
                         <span class="shipping_field"></span>
                     </div>
-                    <div>
-                        <span>Total</span>
-                        <input type="number" name="total" id="total" value="{{ old('total') }}">
+                    <div class="row gx-4 ">
+                        <span class="col fw-bold">Total</span>
+                        <input class="col" type="number" name="total" id="total" value="{{ old('total') }}">
                         @error('total')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div>
-                        <span>Paid Amount</span>
-                        <input type="number" name="paid_amount" id="paid_amount" value="{{ old('paid_amount') }}">
+                    <div class="row gx-4 ">
+                        <span class="col fw-bold">Paid Amount</span>
+                        <input class="col" type="number" name="paid_amount" id="paid_amount" value="{{ old('paid_amount') }}">
                         @error('paid_amount')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-                    <div>
-                        <span>Due Amount</span>
-                        <input type="number" name="due_amount" id="due_amount" value="{{ old('due_amount') }}">
+                    <div class="row gx-4 ">
+                        <span class="col fw-bold">Due Amount</span>
+                        <input class="col" type="number" name="due_amount" id="due_amount" value="{{ old('due_amount') }}">
                         @error('due_amount')
                         <span class="text-danger">{{ $message }}</span>
                         @enderror

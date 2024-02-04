@@ -32,7 +32,7 @@ $(document).ready(function() {
         row.find('.amount').val(amount.toFixed(2));
         totalSum();
     });
-    $('.invoice_bill').on('input', 'input[name="discount"], input[name="tax"], input[name="shiping"], input[name="paid_amount"]', function() {
+    $('.invoice_bill').on('input', 'input[name="discount"], input[name="tax"], input[name="shipping"], input[name="paid_amount"]', function() {
         console.log("Input changed!");
         totalSum();
     });
@@ -47,8 +47,8 @@ $(document).ready(function() {
         $(this).hide();
     });
 
-    $('.shiping').click(function() {
-        $('.shiping_field').append('<br><input type="number" class="shiping" name="shiping" placeholder="Shipping"><button class="x1"><b>x</b></button><br>');
+    $('.shipping').click(function() {
+        $('.shipping_field').append('<br><input type="number" class="shipping" name="shipping" placeholder="Shipping"><button class="x1"><b>x</b></button><br>');
         $(this).hide();
     });
 
@@ -69,8 +69,8 @@ $(document).ready(function() {
         var tax = parseFloat($("input[name=tax]").val()) || 0;
         tax = (tax * total) / 100;
         //get data discount filed
-        var shiping = parseFloat($("input[name=shiping]").val()) || 0;
-        total = total + tax + shiping;
+        var shipping = parseFloat($("input[name=shipping]").val()) || 0;
+        total = total + tax + shipping;
         $('#total').val(total.toFixed(2))
         var paid_amount = parseFloat($("input[name=paid_amount]").val()) || 0;
         paid_amount = total - paid_amount;
