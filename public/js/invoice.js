@@ -6,7 +6,6 @@ $(document).ready(function() {
         if (file) {
             var reader = new FileReader();
             reader.onload = function(event) {
-                document.getElementById('imageLabel').style.display = 'none';
                 document.getElementById('imageDisplay').style.display = 'block';
                 document.getElementById('imageDisplay').src = event.target.result;
             };

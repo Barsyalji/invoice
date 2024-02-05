@@ -98,6 +98,7 @@
 <div class="invoice-container">
   <div class="invoice-header">
     <h1>Invoice </h1>
+    <img src="{{ asset('storage/' . $invoice->image) }}" id="imageDisplay" class="col-2" alt="" width="50px">
   </div>
   <div class="invoice-details">
     <div class="left">

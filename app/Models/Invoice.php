@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Invoice extends Model
 {
-    use HasFactory;
     protected $guarded = ['id'];
     public function items(): HasMany
     {

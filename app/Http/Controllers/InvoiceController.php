@@ -17,9 +17,9 @@ class InvoiceController extends Controller
     {
         try {
             $invoice = Invoice::withCount('items')->get();
-            return view('invoices.index', ['invoices' => $invoice]);
+            return view('invoices.index', ['invoices' => $invoice])->with('messege','Invoices Featched Successfully');
         } catch (\Exception $e) {
-            report($e);
+            throw($e);
             Log::error('Error occurred while storing invoice: ',['erroe' => $e->getMessage()]);
             return redirect()->back()->with('messege', 'Something Went Wrong');
         }
@@ -35,7 +35,7 @@ class InvoiceController extends Controller
             $id =!empty($invoice->id)? ++$invoice->id : 1;
             return view('invoices.create', ['id' => $id]);
         } catch (\Exception $e) {
-            report($e);
+            throw($e);
             Log::error('Error occurred while storing invoice: ' ,['erroe' => $e->getMessage()]);
             return redirect()->back()->with('messege', 'Something Went Wrong');
         }
@@ -78,25 +78,26 @@ class InvoiceController extends Controller
         );
         try {
             DB::beginTransaction();
+            $requestData = $request->except(['_token', 'items']);
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $request['image'] = Storage::disk('public')->put('images', $image);
+                $path = Storage::disk('public')->put('images', $image);
+                $requestData['image'] = $path;
             }
-            $data = $request->except(['_token', 'items',]);
-            if(empty($data['paid_amount'])){
-                $data['paid_amount'] = 0;
+            if (empty($requestData['paid_amount'])) {
+                $requestData['paid_amount'] = 0;
             }
-            $model = Invoice::create($data);
+            $model = Invoice::create($requestData);
             foreach ($request->items as $item) {
                 $id = $model->id;
                 $item = array_merge(['invoice_id' => $id], $item);
                 $model->items()->create($item);
             }
             DB::commit();
-            return redirect('invoices');
+            return redirect('invoices')->with('message', 'Invoices Created Successfully');
         } catch (\Exception $e) {
             DB::rollBack();
-            report($e);
+            throw($e);
             Log::error('Error occurred while storing invoice: ',['erroe' => $e->getMessage()]);
             return redirect()->back()->with('messege', 'Something Went Wrong');
         }
@@ -109,9 +110,9 @@ class InvoiceController extends Controller
     {
         try {
             $invoice = $invoice->with('items')->where('id', $invoice->id)->get();
-            return view('invoices.show', ['invoices' => $invoice]);
+            return view('invoices.show', ['invoices' => $invoice])->with('messege','Invoices Show Successfully');;
         } catch (\Exception $e) {
-            report($e);
+            throw($e);
             Log::error('Error occurred while storing invoice: ' ,['erroe' => $e->getMessage()]);
             return redirect()->back()->with('messege', 'Something Went Wrong');
         }
@@ -126,7 +127,7 @@ class InvoiceController extends Controller
         $invoice = $invoice->with('items')->where('id', $invoice->id)->get();
         return view("invoices.edit", ['invoice' => $invoice]);
     } catch (\Exception $e) {
-        report($e);
+        throw($e);
         Log::error('Error occurred while storing invoice: ' ,['erroe' => $e->getMessage()]);
         return redirect()->back()->with('messege', 'Something Went Wrong');
     }
@@ -139,7 +140,7 @@ class InvoiceController extends Controller
     {
         $request->validate(
             [
-                'image'         => 'required|image|max:2048',
+                'image'         => 'nullable|image|max:2048',
                 'bill_from'     => 'required|string',
                 'bill_to'       => 'required|string',
                 'date'          => 'required|date',
@@ -169,23 +170,29 @@ class InvoiceController extends Controller
         );
         try {
             DB::beginTransaction();
+            $requestData = $request->except(['_token', 'items']);
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
-                $request['image'] = Storage::disk('public')->put('images', $image);
+                $path = Storage::disk('public')->put('images', $image);
+                $requestData['image'] = $path;
             }
-            $invoiceData = $request->all();
-            $invoice->update($invoiceData);
+            if (empty($requestData['paid_amount'])) {
+                $requestData['paid_amount'] = 0;
+            }
+            $invoice->update($requestData);
+            if($request->uid){
             foreach ($request->uid as $value) {
                 $invoice->items()->where('id',$value)->delete();
             }
+        }
             foreach ($request->items as $item) {
                 $invoice->items()->updateOrCreate(['id' => $item['id']], $item);
             }
             DB::commit();
-            return redirect('invoices')->with('messege', 'update sucess');
+            return redirect('invoices')->with('message', 'Invoices Fetched Successfully');
         } catch (\Exception $e) {
             DB::rollBack();
-            report($e);
+            throw($e);
             Log::error('invoice_update_exception',['erroe' => $e->getMessage()]);
             return redirect()->back()->with('messege', 'Something Went Wrong');
         }
@@ -201,10 +208,11 @@ class InvoiceController extends Controller
             $invoice->items()->delete();
             $invoice->delete();
             DB::commit();
-            return redirect()->back();
+            return redirect('invoices')->with('message', 'Invoices Deleted Successfully');
+
         } catch (\Exception $e) {
             DB::rollBack();
-            report($e);
+            throw($e);
             Log::error('Delete_invoice_error',['erroe' => $e->getMessage()]);
             return redirect()->back();
         }
