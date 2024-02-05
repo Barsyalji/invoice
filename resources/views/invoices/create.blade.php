@@ -44,9 +44,7 @@
                 </div>
             </div>
             <div class="d-flex P-2">
-
                 <div class="col-sm-7 ps-2 row gap-3">
-
                     <div>
                         <span class="col fw-bold">Bill From</span><br>
                         <textarea name="bill_from" id="bill_from" cols="30" rows="2"

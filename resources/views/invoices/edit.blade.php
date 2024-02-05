@@ -35,7 +35,7 @@
             @method("PUT")
             <div>
                 <div id="imageFile" class="col-4">
-                    <img src="{{ asset('storage/'.$invoice->image)}}" id="" class="col-2" alt="">
+                    <img src="{{ asset('storage/' . $invoice->image) }}" id="imageDisplay" class="col-2" alt="">
                     <input type="file" name="image" id="image" hidden>
                     <label for="image" id="imageLabel"
                         class="border border-gray col-sm-3 text-center fw-bold">Image</label>
@@ -124,7 +124,7 @@
                     @foreach ($invoice->items as $index => $item)
                     <tr class="">
                         <td>
-                        <input type="hidden" name="items[{{ $index }}][id]" class="item_id" value="{{ $item->id }}"
+                            <input type="hidden" name="items[{{ $index }}][id]" class="item_id" value="{{ $item->id }}"
                                 placeholder="Item">
                             <input type="text" name="items[{{ $index }}][item_name]" class="item_name"
                                 value="{{ $item->item_name }}" placeholder="Item">
